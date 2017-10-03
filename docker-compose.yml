@@ -1,0 +1,19 @@
+version: "3"
+services:
+  wine:
+    image: wine:base
+    build:
+      context: .
+    command: /bin/bash
+    tty: true
+    network_mode: "host"
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XMODIFIERS="@im=fcitx"
+      - GTK_IM_MODULE=fcitx
+      - QT_IM_MODULE=fcitx
+      - XIMPROGRAM=fcitx
+      - LC_CTYPE=ja_JP.UTF-8
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./tmp:/home/wineuser/tmp
