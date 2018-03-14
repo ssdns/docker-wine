@@ -2,9 +2,9 @@ version: "3"
 services:
   kindle:
     image: wine:kindle2
-    command: wine ".wine/drive_c/Program Files/Amazon/Kindle/Kindle.exe"
+    command: wine ".wine/drive_c/Program Files (x86)/Amazon/Kindle/Kindle.exe"
     tty: true
-    network_mode: "host"
+    ipc: host
     environment:
       - DISPLAY=${DISPLAY}
       - XMODIFIERS="@im=fcitx"
