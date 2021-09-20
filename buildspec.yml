@@ -1,0 +1,18 @@
+version: 0.2
+
+env:
+  variables:
+    DOCKER_BUILDKIT: "1"
+    ECR_ENDPOINT: 100383524710.dkr.ecr.ap-northeast-1.amazonaws.com
+  parameter-store:
+    BUNDLE_RUBYGEMS__PKG__GITHUB__COM: /instabase/codebuild/BUNDLE_RUBYGEMS__PKG__GITHUB__COM
+    DOCKERHUB_PASS: /instabase/codebuild/DOCKERHUB_PASS
+phases:
+  install:
+    commands:
+      - apt-get update -y
+      - apt-get install awscli -y
+  build:
+    commands:
+      - echo $DOCKERHUB_PASS | docker login -u rebasessd --password-stdin
+      - aws ecr get-login-password | docker login --username AWS --password-stdin "https://${ECR_ENDPOINT}"
