@@ -40,8 +40,8 @@ RUN export uid=1000 gid=1000 && \
 USER wineuser
 ENV HOME /home/wineuser
 WORKDIR /home/wineuser
-
-#mkdir -p ${WINEPREFIX:-$HOME/.wine}/drive_c/users/wineuser/AppData/Local/Amazon/Kindle
-#RUN winetricks fakejapanese
-#RUN winetricks fontsmooth=rgb
+# RUN mkdir -p ${WINEPREFIX:-$HOME/.wine}/drive_c/users/wineuser/AppData/Local/Amazon/Kindle
 #RUN winetricks cjkfonts vcrun2013
+
+# RUN winetricks fakejapanese
+# RUN winetricks fontsmooth=rgb
