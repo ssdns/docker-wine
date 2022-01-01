@@ -1,10 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:focal
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y \
     && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends software-properties-common apt-transport-https apt-utils wget cabextract gpg-agent git sudo xz-utils
+    && apt-get install -y --no-install-recommends software-properties-common apt-transport-https apt-utils curl wget cabextract gpg-agent git sudo xz-utils net-tools wget gnupg libncurses-dev
 
 ENV TZ Asia/Tokyo
 
@@ -18,12 +18,16 @@ RUN echo "${TZ}" > /etc/timezone \
 
 ENV LANG ja_JP.UTF-8
 
-RUN dpkg --add-architecture i386 \
-        && apt-get update -y && apt-get install -y wine32 winetricks
+RUN dpkg --add-architecture i386 && \
+    curl -sS -o - https://dl.winehq.org/wine-builds/winehq.key | apt-key add - && \
+    apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ focal main' && \
+    apt-get update && apt upgrade && \
+    apt-get install -y --install-recommends winehq-stable && \
+    apt-get install -y playonlinux q4wine winetricks && \
+    apt-get purge software-properties-common -y && \
+    apt-get autoclean -y && rm -rf /var/lib/apt/lists/*
 
 COPY keyboard /etc/default/keyboard
-RUN apt-get purge software-properties-common -y \
-        && apt-get autoclean -y && rm -rf /var/lib/apt/lists/*
 
 RUN export uid=1000 gid=1000 && \
     mkdir -p /home/wineuser && \
@@ -37,6 +41,7 @@ USER wineuser
 ENV HOME /home/wineuser
 WORKDIR /home/wineuser
 
+#mkdir -p ${WINEPREFIX:-$HOME/.wine}/drive_c/users/wineuser/AppData/Local/Amazon/Kindle
 #RUN winetricks fakejapanese
 #RUN winetricks fontsmooth=rgb
-#RUN winetricks cjkfonts
+#RUN winetricks cjkfonts vcrun2013
